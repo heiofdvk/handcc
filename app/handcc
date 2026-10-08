@@ -1,0 +1,6 @@
+#!/bin/zsh
+# App wrapper so macOS can ask for camera access (Terminal.app can't).
+# Output goes to handcc.log next to the app.
+DIR="${0:A:h}/../../.."
+DIR="${DIR:A}"
+exec "$DIR/.venv/bin/python" -u "$DIR/handcc.py" "$@" >"$DIR/handcc.log" 2>&1

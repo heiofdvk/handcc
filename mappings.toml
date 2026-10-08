@@ -1,0 +1,71 @@
+# handcc mappings — each [[map]] turns one hand feature into one MIDI CC.
+#
+# Features (all per hand):
+#   x       palm left → right of the frame
+#   y       palm low → high
+#   depth   hand far → close to the camera
+#   tilt    hand turned like a dial, -60° … +60° (0 = fingers pointing up)
+#   pinch   thumb–index closed → open
+#   pinch2  thumb–middle closed → open
+#   spread  fingers together → splayed
+#   open    fist → open hand
+#
+# Per-mapping options:
+#   hand     "Left" | "Right" | "Any"   (your real hands; the preview is mirrored)
+#   cc       0-127
+#   name     label shown in the window; must be unique (calibration is saved by name)
+#   channel  1-16 (default: the global one below)
+#   range    [lo, hi] raw feature range mapped to 0…127 (default per feature;
+#            press c in the window to calibrate instead)
+#   invert   true flips it (e.g. pinch closed = 127)
+#   curve    1 = linear, >1 more resolution at the low end, <1 at the top
+#   on_lost  CC value to send when the hand leaves the frame (default: hold last value)
+#   min_cutoff / beta   per-mapping smoothing (see [smoothing])
+
+port = "HandCC"      # virtual MIDI port created by the script. Set to "IAC" to use the IAC bus instead.
+channel = 1
+camera = 0           # run with --list-cameras if 0 turns out to be your iPhone (Continuity Camera)
+mirror = true        # selfie view: move right, hand moves right on screen
+swap_hands = false   # set true if the window labels your hands backwards
+
+[smoothing]
+# One Euro filter. Lower min_cutoff = steadier when still (but laggier);
+# higher beta = snappier on fast moves.
+min_cutoff = 1.0
+beta = 2.0
+
+[[map]]
+name = "R pinch"
+hand = "Right"
+feature = "pinch"
+cc = 2               # breath
+
+[[map]]
+name = "R height"
+hand = "Right"
+feature = "y"
+cc = 11              # expression
+
+[[map]]
+name = "R tilt"
+hand = "Right"
+feature = "tilt"
+cc = 74              # brightness / filter cutoff on most synths
+
+[[map]]
+name = "L height"
+hand = "Left"
+feature = "y"
+cc = 1               # mod wheel
+
+[[map]]
+name = "L open"
+hand = "Left"
+feature = "open"
+cc = 21
+
+[[map]]
+name = "L spread"
+hand = "Left"
+feature = "spread"
+cc = 22
